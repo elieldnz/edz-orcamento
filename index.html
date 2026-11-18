@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peça seu orçamento · EDZ Films</title>
+<meta name="description" content="Peça um orçamento de edição de Reels, cortes de conteúdo, captação ou fotografia de eventos com a EDZ Films. Resposta em até 1 dia útil.">
+<meta property="og:title" content="Peça seu orçamento · EDZ Films">
+<meta property="og:description" content="Reels, cortes, captação e fotos de eventos. Conte o que precisa e receba o valor pelo WhatsApp.">
+<meta name="theme-color" content="#121110">
+<link rel="icon" href="img/icone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121110; --wine:#2A0E16; --wine2:#3A1520; --card:#1F1A18; --line:#3A2C2A;
+    --text:#F3EFE6; --muted:#BFB2A8; --accent:#F5B700; --accent2:#FFB347; --ink:#121110; --err:#FF8A7A;
+    --radius:18px; --max:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent)}
+  h1,h2,h3{font-family:"Space Grotesk",Inter,sans-serif;line-height:1.08;letter-spacing:-.02em}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+  header{border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .nav img{height:38px;display:block}
+  .nav a.back{color:var(--muted);text-decoration:none;font-size:15px}
+  .nav a.back:hover{color:var(--text)}
+
+  .hero{position:relative;overflow:hidden;padding:64px 0 80px}
+  .hero::before{content:"";position:absolute;inset:-35% -10% auto auto;width:760px;height:760px;background:radial-gradient(circle,rgba(122,24,44,.55),transparent 65%);pointer-events:none}
+  .grid{position:relative;display:grid;grid-template-columns:1fr 520px;gap:56px;align-items:start}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--accent)}
+  .eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .hero h1{font-size:clamp(38px,5.4vw,64px);margin:18px 0 18px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .lead{font-size:19px;color:var(--muted);max-width:540px}
+  .benefits{list-style:none;margin:30px 0 34px;display:grid;gap:14px}
+  .benefits li{display:flex;gap:12px;align-items:flex-start;font-size:16px}
+  .benefits svg{flex:none;width:22px;height:22px;margin-top:1px}
+  .prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:560px}
+  .jump{display:none;margin-bottom:24px}
+  .price{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .price span{display:block;font-size:13px;color:var(--muted)}
+  .price b{font-family:"Space Grotesk";font-size:20px}
+
+  .form-card{background:linear-gradient(170deg,var(--wine2),var(--wine));border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:0 30px 80px -30px rgba(0,0,0,.6)}
+  .form-card h2{font-size:26px;margin-bottom:6px}
+  .form-card .sub{color:var(--muted);font-size:15px;margin-bottom:22px}
+  form{display:grid;gap:16px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field{display:grid;gap:6px}
+  label,.legend{font-size:14px;font-weight:600}
+  .opt{font-weight:400;color:var(--muted)}
+  input[type=text],input[type=tel],input[type=email],input[type=date],select,textarea{
+    width:100%;font:inherit;font-size:16px;color:var(--text);background:rgba(18,17,16,.55);
+    border:1px solid #5A4440;border-radius:12px;padding:12px 14px;min-height:48px;outline:none;transition:border-color .15s,box-shadow .15s}
+  textarea{min-height:96px;resize:vertical}
+  select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 21px,calc(100% - 15px) 21px;background-size:5px 5px;background-repeat:no-repeat;padding-right:40px}
+  select option{background:#2A0E16;color:var(--text)}
+  input::placeholder,textarea::placeholder{color:#8F817A}
+  input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,183,0,.25)}
+  [aria-invalid=true]{border-color:var(--err)!important}
+  .addr{font-size:14px;color:var(--muted);min-height:0}
+  .quote{background:rgba(18,17,16,.6);border:1px solid #5A4440;border-radius:14px;padding:16px 18px;display:grid;gap:6px;font-size:14px}
+  .quote .ln{display:flex;justify-content:space-between;gap:12px;color:var(--muted)}
+  .quote .ln b{color:var(--text);font-weight:600;white-space:nowrap}
+  .quote .tot{border-top:1px solid #5A4440;margin-top:6px;padding-top:10px;font-size:16px;color:var(--text)}
+  .quote .tot b{color:var(--accent);font-size:19px;font-family:"Space Grotesk"}
+  .quote small{color:#8F817A;font-size:12px;line-height:1.45}
+  .err{font-size:13px;color:var(--err);min-height:0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips label{font-weight:500;font-size:14px;cursor:pointer}
+  .chips input{position:absolute;opacity:0;width:1px;height:1px}
+  .chips span{display:inline-flex;align-items:center;min-height:44px;padding:10px 14px;border:1px solid #5A4440;border-radius:999px;background:rgba(18,17,16,.45);transition:all .15s}
+  .chips input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+  .chips input:focus-visible+span{box-shadow:0 0 0 3px rgba(245,183,0,.4)}
+  .consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;font-weight:400;color:var(--muted)}
+  .consent input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex:none}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:14px 24px;border-radius:999px;font:600 16px Inter,sans-serif;border:0;cursor:pointer;text-decoration:none}
+  .btn-primary{background:var(--accent);color:var(--ink)}
+  .btn-primary:hover{background:var(--accent2)}
+  .note{font-size:12px;color:var(--muted);text-align:center}
+  .done{display:none;text-align:center;padding:20px 4px}
+  .done.show{display:block}
+  .done h2{margin:14px 0 8px}
+  .done p{color:var(--muted);margin-bottom:20px}
+
+  section{padding:80px 0}
+  .sec-title{font-size:clamp(28px,4vw,44px);margin:12px 0 30px}
+  .works{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .work{display:block;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--card);text-decoration:none;color:var(--text)}
+  .work img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+  .work div{padding:14px 16px;font-weight:600;font-size:15px}
+  .work div span{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+  .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;counter-reset:s}
+  .step{padding:24px;border-top:2px solid var(--line)}
+  .step::before{counter-increment:s;content:"0" counter(s);font-family:"Space Grotesk";font-weight:700;font-size:36px;color:var(--accent);display:block;margin-bottom:8px}
+  .step h3{font-size:20px;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:15px}
+  .band{background:var(--wine)}
+  details{border-bottom:1px solid var(--line);padding:18px 0;max-width:820px}
+  summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--accent);font-size:24px;line-height:1}
+  details[open] summary::after{content:"–"}
+  details p{color:var(--muted);margin-top:10px}
+  footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:14px}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a{color:var(--muted)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+  @media (max-width:980px){.jump{display:inline-flex}.grid{grid-template-columns:1fr}.works,.steps{grid-template-columns:1fr 1fr}}
+  @media (max-width:600px){.row,.prices{grid-template-columns:1fr}.works,.steps{grid-template-columns:1fr}.form-card{padding:22px}.hero{padding:40px 0 56px}section{padding:56px 0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="https://elieldnz.github.io/edz-films-site/"><img src="img/logo.svg" alt="EDZ Films"></a>
+    <a class="back" href="https://elieldnz.github.io/edz-films-site/">← Ver o site completo</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap grid">
+      <div>
+        <span class="eyebrow">Orçamento sem compromisso</span>
+        <h1>Conte o que você precisa e receba o <em>valor certo</em> pelo WhatsApp.</h1>
+        <p class="lead">Edição de Reels, cortes de podcast, captação e fotos de festas. Preço fechado, prazo combinado por escrito e prévia antes de pagar o saldo.</p>
+        <ul class="benefits">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#F5B700" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Resposta em até 1 dia útil</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#F5B700" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Edição pronta em 48h depois do material e do sinal</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#F5B700" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>50% para reservar, 50% só quando você aprovar a prévia</li>
+        </ul>
+        <a class="btn btn-primary jump" href="#form">Pedir meu orçamento ↓</a>
+        <div class="prices" aria-label="Preços de referência">
+          <div class="price"><span>4 Reels editados</span><b>R$ 600</b></div>
+          <div class="price"><span>6 cortes de conteúdo</span><b>R$ 600</b></div>
+          <div class="price"><span>Meia diária com captação</span><b>R$ 1.100 + deslocamento</b></div>
+          <div class="price"><span>Fotos de festa</span><b>R$ 690 + deslocamento</b></div>
+        </div>
+      </div>
+
+      <div class="form-card" id="form">
+        <div id="formWrap">
+          <h2>Pedir orçamento</h2>
+          <p class="sub">Leva menos de 1 minuto. Os campos com * são obrigatórios.</p>
+          <form id="lead" novalidate>
+            <div class="row">
+              <div class="field">
+                <label for="nome">Seu nome *</label>
+                <input id="nome" name="nome" type="text" autocomplete="name" required aria-describedby="e-nome">
+                <div class="err" id="e-nome" aria-live="polite"></div>
+              </div>
+              <div class="field">
+                <label for="whats">WhatsApp com DDD *</label>
+                <input id="whats" name="whats" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000" required aria-describedby="e-whats">
+                <div class="err" id="e-whats" aria-live="polite"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="empresa">Empresa ou @ <span class="opt">(opcional)</span></label>
+                <input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="@suaempresa">
+              </div>
+              <div class="field">
+                <label for="email">E-mail <span class="opt">(opcional)</span></label>
+                <input id="email" name="email" type="email" autocomplete="email" aria-describedby="e-email">
+                <div class="err" id="e-email" aria-live="polite"></div>
+              </div>
+            </div>
+            <fieldset class="field" style="border:0">
+              <legend class="legend">O que você precisa? *</legend>
+              <div class="chips" id="servicos" aria-describedby="e-servico">
+                <label><input type="checkbox" name="servico" value="Reels"><span>Reels</span></label>
+                <label><input type="checkbox" name="servico" value="Cortes de podcast/live"><span>Cortes de podcast/live</span></label>
+                <label><input type="checkbox" name="servico" value="Captação de vídeo"><span>Captação de vídeo</span></label>
+                <label><input type="checkbox" name="servico" value="Fotos de evento"><span>Fotos de evento</span></label>
+                <label><input type="checkbox" name="servico" value="Vídeo de evento"><span>Vídeo de evento</span></label>
+                <label><input type="checkbox" name="servico" value="Outro"><span>Outro</span></label>
+              </div>
+              <div class="err" id="e-servico" aria-live="polite"></div>
+            </fieldset>
+            <div class="row">
+              <div class="field">
+                <label for="segmento">Seu segmento</label>
+                <select id="segmento" name="segmento">
+                  <option value="">Escolha</option>
+                  <option>Comércio ou restaurante</option>
+                  <option>Imobiliária ou corretor</option>
+                  <option>Clínica ou estética</option>
+                  <option>Curso ou produtor de conteúdo</option>
+                  <option>Músico ou artista</option>
+                  <option>Festa ou evento pessoal</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="material">Já tem o material gravado?</label>
+                <select id="material" name="material">
+                  <option value="">Escolha</option>
+                  <option>Sim, já está gravado</option>
+                  <option>Parte gravado</option>
+                  <option>Não, preciso de captação</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="data">Data ou prazo <span class="opt">(opcional)</span></label>
+                <input id="data" name="data" type="date">
+              </div>
+              <div class="field">
+                <label for="verba">Quanto pretende investir?</label>
+                <select id="verba" name="verba">
+                  <option value="">Prefiro não dizer</option>
+                  <option>Até R$ 600</option>
+                  <option>R$ 600 a R$ 1.200</option>
+                  <option>R$ 1.200 a R$ 2.500</option>
+                  <option>Acima de R$ 2.500</option>
+                </select>
+              </div>
+            </div>
+            <fieldset class="field local" id="local" hidden style="border:0">
+              <legend class="legend">Onde vai ser a captação ou o evento? *</legend>
+              <div class="row">
+                <div class="field">
+                  <label for="cep">CEP *</label>
+                  <input id="cep" name="cep" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" aria-describedby="e-cep">
+                  <div class="err" id="e-cep" aria-live="polite"></div>
+                </div>
+                <div class="field">
+                  <label for="numero">Número *</label>
+                  <input id="numero" name="numero" type="text" inputmode="numeric" autocomplete="address-line2" aria-describedby="e-numero">
+                  <div class="err" id="e-numero" aria-live="polite"></div>
+                </div>
+              </div>
+              <p class="addr" id="addr" aria-live="polite"></p>
+              <div class="field">
+                <span class="legend">Precisa de algum equipamento extra?</span>
+                <div class="chips" id="extras">
+                  <label><input type="checkbox" name="extra" value="drone"><span>Drone</span></label>
+                  <label><input type="checkbox" name="extra" value="luz"><span>Iluminação extra</span></label>
+                  <label><input type="checkbox" name="extra" value="cam2"><span>Segunda câmera</span></label>
+                </div>
+              </div>
+            </fieldset>
+            <div class="field">
+              <span class="legend">Precisa de nota fiscal?</span>
+              <div class="chips" id="nfChips">
+                <label><input type="radio" name="nf" value="nao" checked><span>Não preciso</span></label>
+                <label><input type="radio" name="nf" value="cpf"><span>Sim, no CPF</span></label>
+                <label><input type="radio" name="nf" value="cnpj"><span>Sim, no CNPJ</span></label>
+              </div>
+            </div>
+            <div class="field" id="docWrap" hidden>
+              <label for="doc" id="docLbl">CPF para a nota *</label>
+              <input id="doc" name="doc" type="text" inputmode="numeric" aria-describedby="e-doc">
+              <div class="err" id="e-doc" aria-live="polite"></div>
+            </div>
+            <div class="quote" id="quote" hidden aria-live="polite"></div>
+            <div class="field">
+              <label for="msg">Conte um pouco do projeto <span class="opt">(opcional)</span></label>
+              <textarea id="msg" name="msg" placeholder="Quantos vídeos, duração, referência que você gosta..."></textarea>
+            </div>
+            <label class="consent"><input type="checkbox" id="lgpd" name="lgpd" aria-describedby="e-lgpd"> <span>Aceito que a EDZ Films registre estes dados na sua planilha de pedidos e me contate pelo WhatsApp sobre este orçamento. Eles não serão usados para outra finalidade, e posso pedir a exclusão a qualquer momento. *</span></label>
+            <div class="err" id="e-lgpd" aria-live="polite"></div>
+            <button class="btn btn-primary" type="submit">Enviar pelo WhatsApp →</button>
+            <p class="note">Ao enviar, abrimos o WhatsApp com seu pedido já escrito. É só tocar em enviar.</p>
+          </form>
+        </div>
+        <div class="done" id="done" role="status" aria-live="polite" tabindex="-1">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#F5B700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6"/></svg>
+          <h2>Pedido pronto!</h2>
+          <p>Abrimos o WhatsApp com seu pedido. Se ele não abriu, toque no botão abaixo e envie a mensagem.</p>
+          <a class="btn btn-primary" id="waLink" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <span class="eyebrow">Trabalhos</span>
+      <h2 class="sec-title">Veja o que já fizemos no seu segmento</h2>
+      <div class="works">
+        <a class="work" href="https://www.youtube.com/playlist?list=PLYf5YNQk9c6Q" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/d-QDbZ22VmQ/hqdefault.jpg" alt=""><div>Comércio e restaurantes<span>Comerciais com locução</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLPm5fJndGUpE" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/azwf3bTP9zs/hqdefault.jpg" alt=""><div>Imobiliárias<span>Tours de imóveis</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLfJeAw9WzSmw" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/C703h_lXqYI/hqdefault.jpg" alt=""><div>Clínicas e estética<span>Séries educativas</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLbYFC1hOCmQE" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/6cXUgsvhCXk/hqdefault.jpg" alt=""><div>Cursos e conteúdo<span>Aulas e programas</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLRiKjx0YMtgM" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/3Mgr2SMTOCA/hqdefault.jpg" alt=""><div>Músicos e artistas<span>Clipes e bastidores</span></div></a>
+        <a class="work" href="https://elieldnz.github.io/edz-films-site/#fotos"><img loading="lazy" src="img/festa/03-bolo.jpg" alt=""><div>Fotos de festas<span>13 festas na galeria</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">Como funciona</span>
+      <h2 class="sec-title">Do pedido à entrega em 3 passos</h2>
+      <div class="steps">
+        <div class="step"><h3>Você pede</h3><p>Preenche o formulário e o pedido chega no WhatsApp da EDZ.</p></div>
+        <div class="step"><h3>Fechamos o escopo</h3><p>Valor, prazo e número de ajustes combinados por escrito. 50% via Pix reserva a vaga.</p></div>
+        <div class="step"><h3>Você aprova</h3><p>Prévia com marca d'água; com a aprovação e o saldo, os arquivos finais saem em alta qualidade.</p></div>
+      </div>
+      <div style="margin-top:48px">
+        <details><summary>E a música dos vídeos?</summary><p>Criamos trilhas originais com o Suno, em plano pago com direito de uso comercial, para o vídeo não ser bloqueado nas redes.</p></details>
+        <details><summary>O orçamento é gratuito?</summary><p>Sim. Você só paga se fechar o serviço.</p></details>
+        <details><summary>Como é calculado o deslocamento?</summary><p>Para captação e eventos, o formulário calcula pelo seu CEP: gasolina de ida e volta saindo de Embu das Artes, pedágio estimado, almoço da equipe e uso do equipamento. O valor final é confirmado no WhatsApp antes de fechar.</p></details>
+        <details><summary>Vocês emitem nota fiscal?</summary><p>Sim. A EDZ Films emite nota fiscal de serviço como MEI, no CPF ou no CNPJ. Marque no formulário e o valor da emissão já aparece no total.</p></details>
+        <details><summary>Os preços acima são fixos?</summary><p>São a base dos pacotes. Projetos com mais vídeos, material muito longo ou prazo de urgência podem mudar o valor, sempre combinado antes.</p></details>
+        <details><summary>O que acontece com os meus dados?</summary><p>Seu pedido é registrado na planilha de orçamentos da EDZ Films e enviado para o WhatsApp. Usamos o contato só para responder este pedido; para apagar seus dados, é só pedir pelo WhatsApp.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="ano"></span> EDZ Films · Produção e edição de vídeo</span>
+    <a href="https://elieldnz.github.io/edz-films-site/">Voltar ao site</a>
+  </div>
+</footer>
+
+<script>
+  /* ===== CONFIGURAÇÃO: mesmo número do index.html ===== */
+  const WHATSAPP = "5511952689176";
+  // Link do Apps Script que grava os pedidos na planilha (deixe "" para desligar)
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwzFk9KS2B4iCrnid5iuJbRVvk8J19b9yKbipuNQwzY40VhPodgwfSLryMzh-6jOsEK/exec";
+  // Custos de deslocamento (edite à vontade)
+  const CUSTOS = {
+    origem: { nome: "Embu das Artes", lat: -23.6490, lon: -46.8520 },
+    consumoKmL: 8,          // km por litro do carro
+    gasolinaLitro: 6.40,    // R$ por litro (média SP, ANP nov/2026)
+    pedagioKm: 0.22,        // R$ por km rodado fora da região (rodovias pedagiadas de SP), estimativa
+    kmSemPedagio: 30,       // primeiros km de ida sem pedágio
+    almoco: 45,             // R$ por pessoa, captação/evento
+    equipamentoProprio: 80, // desgaste e seguro do equipamento da EDZ, por saída
+    aluguel: { drone: 250, luz: 150, cam2: 200 }, // equipamento alugado, por diária
+    arredondar: 10          // arredonda o deslocamento para cima
+  };
+  // Nota fiscal (EDZ Films como MEI). O DAS do MEI é fixo por mês e já inclui o ISS,
+  // então a nota não gera imposto extra. Aqui você escolhe quanto embutir no preço
+  // quando o cliente pede nota:
+  //  - fixo: parte do DAS mensal (R$ 86,05) rateada entre os trabalhos com nota
+  //  - percentual: use se sair do MEI (ex.: 6 no Simples Nacional, Anexo III, faixa inicial)
+  const NOTA = { fixo: 22, percentual: 0, rotulo: "Emissão de nota fiscal (MEI)" };
+  const PACOTES = { "Reels": {nome:"Reels Express", valor:600}, "Cortes de podcast/live": {nome:"Cortes de podcast/live", valor:600}, "Captação de vídeo": {nome:"Meia diária EDZ", valor:1100}, "Fotos de evento": {nome:"Cobertura de festa (3h)", valor:690}, "Vídeo de evento": {nome:"Vídeo de evento", valor:null} };
+  const NO_LOCAL = ["Captação de vídeo","Fotos de evento","Vídeo de evento"];
+  const EXTRAS_NOME = { drone:"Drone (aluguel)", luz:"Iluminação extra (aluguel)", cam2:"Segunda câmera (aluguel)" };
+  /* ==================================================== */
+
+  const $ = s => document.querySelector(s);
+  $("#ano").textContent = new Date().getFullYear();
+
+  // pré-seleciona serviço vindo do site (orcamento.html?servico=fotos)
+  const mapa = {fotos:"Fotos de evento", reels:"Reels", cortes:"Cortes de podcast/live", captacao:"Captação de vídeo", evento:"Vídeo de evento"};
+  const q = new URLSearchParams(location.search).get("servico");
+  if (q && mapa[q]) { const el = document.querySelector(`input[name=servico][value="${mapa[q]}"]`); if (el) el.checked = true; }
+
+  setTimeout(() => toggleLocal(), 0);
+  // máscara simples de telefone
+  const tel = $("#whats");
+  tel.addEventListener("input", () => {
+    let d = tel.value.replace(/\D/g, "").slice(0, 11);
+    if (d.length > 6) tel.value = `(${d.slice(0,2)}) ${d.slice(2, d.length-4)}-${d.slice(-4)}`;
+    else if (d.length > 2) tel.value = `(${d.slice(0,2)}) ${d.slice(2)}`;
+    else tel.value = d;
+  });
+
+
+  // ---------- calculadora de deslocamento ----------
+  const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  let geo = null, rota = null, endereco = null, orc = null, buscaId = 0;
+  const precisaLocal = () => [...document.querySelectorAll("input[name=servico]:checked")].some(i => NO_LOCAL.includes(i.value));
+  const toggleLocal = () => { $("#local").hidden = !precisaLocal(); render(); };
+  document.querySelectorAll("input[name=servico]").forEach(i => i.addEventListener("change", toggleLocal));
+  document.querySelectorAll("input[name=extra]").forEach(i => i.addEventListener("change", render));
+  const nfTipo = () => (document.querySelector("input[name=nf]:checked") || {}).value || "nao";
+  document.querySelectorAll("input[name=nf]").forEach(i => i.addEventListener("change", () => {
+    const t = nfTipo(); $("#docWrap").hidden = t === "nao";
+    $("#docLbl").textContent = t === "cnpj" ? "CNPJ para a nota *" : "CPF para a nota *";
+    $("#doc").value = ""; setErr("doc",""); render();
+  }));
+  const doc = $("#doc");
+  doc.addEventListener("input", () => {
+    const d = doc.value.replace(/\D/g,"").slice(0, nfTipo() === "cnpj" ? 14 : 11);
+    doc.value = nfTipo() === "cnpj"
+      ? d.replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d)/,"$1-$2")
+      : d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+  });
+  const digitoOk = (d) => {
+    if (/^(\d)\1+$/.test(d)) return false;
+    if (d.length === 11) {
+      const dv = n => { let s = 0; for (let i = 0; i < n; i++) s += +d[i] * (n + 1 - i); const r = s * 10 % 11; return r === 10 ? 0 : r; };
+      return dv(9) === +d[9] && dv(10) === +d[10];
+    }
+    if (d.length === 14) {
+      const dv = n => { const w = n === 12 ? [5,4,3,2,9,8,7,6,5,4,3,2] : [6,5,4,3,2,9,8,7,6,5,4,3,2]; let s = 0; for (let i = 0; i < n; i++) s += +d[i] * w[i]; const r = s % 11; return r < 2 ? 0 : 11 - r; };
+      return dv(12) === +d[12] && dv(13) === +d[13];
+    }
+    return false;
+  };
+
+  const cep = $("#cep");
+  cep.addEventListener("input", () => {
+    let d = cep.value.replace(/\D/g,"").slice(0,8);
+    cep.value = d.length > 5 ? d.slice(0,5)+"-"+d.slice(5) : d;
+    if (d.length === 8) buscar();
+  });
+  // ao mudar o número, refina a rota sem apagar a estimativa atual
+  $("#numero").addEventListener("change", () => { if (endereco) buscar(true); });
+
+  async function buscar(refinar){
+    const id = ++buscaId, d = cep.value.replace(/\D/g,"");
+    const anterior = refinar ? rota : null;
+    setErr("cep",""); if (!refinar) { $("#addr").textContent = "Buscando endereço…"; rota = null; render(); }
+    try {
+      const r = await fetch(`https://viacep.com.br/ws/${d}/json/`).then(r => r.json());
+      if (id !== buscaId) return;
+      if (r.erro) { endereco = null; $("#addr").textContent = ""; setErr("cep","CEP não encontrado."); return; }
+      endereco = r;
+      $("#addr").textContent = `${r.logradouro ? r.logradouro + ", " : ""}${r.bairro ? r.bairro + " · " : ""}${r.localidade}/${r.uf}`;
+      const num = $("#numero").value.trim();
+      const tentativas = [
+        r.logradouro && `street=${encodeURIComponent((num? num+" ":"")+r.logradouro)}&city=${encodeURIComponent(r.localidade)}&state=${r.uf}`,
+        `postalcode=${d.slice(0,5)}-${d.slice(5)}&city=${encodeURIComponent(r.localidade)}&state=${r.uf}`,
+        `city=${encodeURIComponent(r.localidade)}&state=${r.uf}`
+      ].filter(Boolean);
+      geo = null;
+      for (const q of tentativas) {
+        const g = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&${q}`).then(r => r.json()).catch(() => []);
+        if (g && g[0]) { geo = { lat:+g[0].lat, lon:+g[0].lon }; break; }
+      }
+      if (id !== buscaId) return;
+      if (!geo) { $("#addr").textContent += " · não consegui localizar no mapa; o deslocamento será calculado no WhatsApp."; return; }
+      const o = CUSTOS.origem;
+      try {
+        const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 8000);
+        const rt = await fetch(`https://router.project-osrm.org/route/v1/driving/${o.lon},${o.lat};${geo.lon},${geo.lat}?overview=false`, {signal: ctl.signal}).then(r => r.json());
+        clearTimeout(t);
+        if (rt.code === "Ok" && rt.routes[0]) rota = { km: rt.routes[0].distance/1000, min: rt.routes[0].duration/60 };
+      } catch(e) {}
+      if (id !== buscaId) return;
+      if (!rota && anterior && !anterior.aprox) rota = anterior;
+      if (!rota) { // plano B: linha reta x 1,35 (fator médio de estrada na Grande SP)
+        const R = 6371, rad = x => x*Math.PI/180, dLat = rad(geo.lat-o.lat), dLon = rad(geo.lon-o.lon);
+        const a = Math.sin(dLat/2)**2 + Math.cos(rad(o.lat))*Math.cos(rad(geo.lat))*Math.sin(dLon/2)**2;
+        const km = 2*R*Math.asin(Math.sqrt(a)) * 1.35;
+        rota = { km, min: km / 40 * 60, aprox: true };
+      }
+    } catch(e) { $("#addr").textContent += " · não foi possível calcular agora; calculamos no WhatsApp."; }
+    render();
+  }
+
+  function render(){
+    const box = $("#quote"), c = CUSTOS, local = precisaLocal();
+    const servs = [...document.querySelectorAll("input[name=servico]:checked")].map(i => i.value).filter(v => PACOTES[v]);
+    const pacotes = servs.map(v => PACOTES[v]);
+    if (!pacotes.length || (local && !rota)) { box.hidden = true; orc = null; return; }
+    const base = pacotes.reduce((t,p) => t + (p.valor||0), 0);
+    const temSobConsulta = pacotes.some(p => p.valor === null);
+    const ln = (a,b) => `<div class="ln"><span>${a}</span><b>${b}</b></div>`;
+    let html = "", desloc = 0, d = {};
+    if (local) {
+      const kmIda = rota.km, kmTotal = kmIda*2;
+      const gasolina = kmTotal / c.consumoKmL * c.gasolinaLitro;
+      const pedagio = Math.max(0, kmIda - c.kmSemPedagio) * c.pedagioKm * 2;
+      const extras = [...document.querySelectorAll("input[name=extra]:checked")].map(i => i.value);
+      const aluguel = extras.reduce((t,x) => t + (c.aluguel[x]||0), 0);
+      desloc = Math.ceil((gasolina + pedagio + c.almoco + c.equipamentoProprio + aluguel) / c.arredondar) * c.arredondar;
+      d = { kmIda:+kmIda.toFixed(1), gasolina, pedagio, almoco:c.almoco, equipamento:c.equipamentoProprio, aluguel, extras };
+      html += ln(`Distância de ${c.origem.nome}${rota.aprox ? " (aprox.)" : ""}`, `${kmIda.toFixed(1).replace(".",",")} km ida · ${Math.round(rota.min)} min`) +
+        ln(`Gasolina ida e volta (${kmTotal.toFixed(0)} km)`, brl(gasolina)) +
+        ln("Pedágio estimado", pedagio ? brl(pedagio) : "sem pedágio") +
+        ln("Almoço da equipe", brl(c.almoco)) +
+        ln("Uso do equipamento EDZ", brl(c.equipamentoProprio)) +
+        (aluguel ? ln(extras.map(x => EXTRAS_NOME[x]).join(", "), brl(aluguel)) : "") +
+        ln("<b style='color:var(--text)'>Deslocamento</b>", brl(desloc));
+    }
+    const sub = base + desloc;
+    // tributo embutido "por dentro": o valor da nota já cobre o percentual sobre ela mesma
+    const nota = nfTipo() !== "nao";
+    const tributos = nota ? Math.ceil((sub + NOTA.fixo) / (1 - NOTA.percentual/100) - sub) : 0;
+    orc = { ...d, deslocamento: local ? desloc : "", base, tributos, nota: nota ? nfTipo().toUpperCase() : "Não", total: sub + tributos, pacotes, temSobConsulta, local };
+    html += pacotes.map(p => ln(p.nome, p.valor === null ? "sob consulta" : brl(p.valor))).join("") +
+      (nota ? ln(NOTA.rotulo + (NOTA.percentual ? ` (${String(NOTA.percentual).replace(".",",")}%)` : ""), brl(tributos)) : "") +
+      `<div class="ln tot"><span>Total estimado${nota ? " com nota" : ""}${temSobConsulta ? " (sem os itens sob consulta)" : ""}</span><b>${brl(orc.total)}</b></div>` +
+      `<small>${local ? "Estimativa automática. Pedágio e trânsito podem mudar; o" : "O"} valor final é confirmado no WhatsApp antes de fechar.${nota ? " Nota fiscal de serviço emitida pela EDZ Films (MEI)." : ""}</small>`;
+    box.innerHTML = html; box.hidden = false;
+  }
+
+  const setErr = (id, msg, field) => {
+    $("#e-" + id).textContent = msg || "";
+    if (field) field.setAttribute("aria-invalid", msg ? "true" : "false");
+    return !msg;
+  };
+
+  $("#lead").addEventListener("submit", e => {
+    e.preventDefault();
+    const f = e.target;
+    const nome = f.nome.value.trim();
+    const fone = f.whats.value.replace(/\D/g, "");
+    const email = f.email.value.trim();
+    const servicos = [...f.querySelectorAll("input[name=servico]:checked")].map(i => i.value);
+
+    let ok = true;
+    ok = setErr("nome", nome.length < 2 ? "Digite seu nome." : "", f.nome) && ok;
+    ok = setErr("whats", (fone.length < 10 || fone.length > 11) ? "Digite o WhatsApp com DDD." : "", f.whats) && ok;
+    ok = setErr("email", (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ? "Confira o e-mail." : "", f.email) && ok;
+    ok = setErr("servico", servicos.length ? "" : "Escolha pelo menos um serviço.") && ok;
+    if (precisaLocal()) {
+      ok = setErr("cep", f.cep.value.replace(/\D/g,"").length === 8 && endereco ? "" : "Digite um CEP válido.", f.cep) && ok;
+      ok = setErr("numero", f.numero.value.trim() ? "" : "Digite o número.", f.numero) && ok;
+    }
+    if (nfTipo() !== "nao") {
+      const d = f.doc.value.replace(/\D/g,"");
+      ok = setErr("doc", digitoOk(d) && d.length === (nfTipo() === "cnpj" ? 14 : 11) ? "" : `Confira o ${nfTipo().toUpperCase()}.`, f.doc) && ok;
+    }
+    ok = setErr("lgpd", f.lgpd.checked ? "" : "Marque para podermos responder pelo WhatsApp.", f.lgpd) && ok;
+    if (!ok) { const first = f.querySelector('[aria-invalid="true"]') || f.querySelector("input[name=servico]"); first && first.focus(); return; }
+
+    const dataFmt = f.data.value ? f.data.value.split("-").reverse().join("/") : "";
+    const linhas = [
+      "*Pedido de orçamento · EDZ Films*",
+      `Nome: ${nome}`,
+      `WhatsApp: ${f.whats.value}`,
+      f.empresa.value.trim() && `Empresa/Instagram: ${f.empresa.value.trim()}`,
+      email && `E-mail: ${email}`,
+      `Serviço: ${servicos.join(", ")}`,
+      f.segmento.value && `Segmento: ${f.segmento.value}`,
+      f.material.value && `Material: ${f.material.value}`,
+      dataFmt && `Data/prazo: ${dataFmt}`,
+      precisaLocal() && endereco && `Local: ${endereco.logradouro ? endereco.logradouro + ", " : ""}${f.numero.value.trim()} · ${endereco.bairro ? endereco.bairro + " · " : ""}${endereco.localidade}/${endereco.uf} · CEP ${f.cep.value}`,
+      orc && orc.local && `Distância: ${String(orc.kmIda).replace(".",",")} km (ida)`,
+      orc && orc.local && orc.extras.length && `Equipamento extra: ${orc.extras.map(x => EXTRAS_NOME[x]).join(", ")}`,
+      orc && orc.local && `Deslocamento estimado: ${brl(orc.deslocamento)} (gasolina ${brl(orc.gasolina)}, pedágio ${brl(orc.pedagio)}, almoço ${brl(orc.almoco)}, equipamento ${brl(orc.equipamento)}${orc.aluguel ? ", aluguel " + brl(orc.aluguel) : ""})`,
+      nfTipo() !== "nao" && `Nota fiscal: sim, no ${nfTipo().toUpperCase()} ${f.doc.value}`,
+      orc && orc.tributos && `${NOTA.rotulo}: ${brl(orc.tributos)}`,
+      orc && `Total estimado${nfTipo() !== "nao" ? " com nota" : ""}: ${brl(orc.total)}${orc.temSobConsulta ? " + itens sob consulta" : ""}`,
+      f.verba.value && `Investimento: ${f.verba.value}`,
+      f.msg.value.trim() && `Projeto: ${f.msg.value.trim()}`
+    ].filter(Boolean).join("\n");
+
+    if (SHEETS_URL) {
+      const reg = {
+        nome, whatsapp: f.whats.value, empresa: f.empresa.value.trim(), email,
+        servicos: servicos.join(", "), segmento: f.segmento.value, material: f.material.value,
+        data: dataFmt, investimento: f.verba.value, mensagem: f.msg.value.trim(),
+        cep: precisaLocal() ? f.cep.value : "", numero: precisaLocal() ? f.numero.value.trim() : "",
+        endereco: precisaLocal() && endereco ? `${endereco.logradouro || ""}, ${endereco.bairro || ""}, ${endereco.localidade}/${endereco.uf}` : "",
+        km_ida: orc && orc.local ? orc.kmIda : "", gasolina: orc && orc.local ? +orc.gasolina.toFixed(2) : "", pedagio: orc && orc.local ? +orc.pedagio.toFixed(2) : "",
+        almoco: orc && orc.local ? orc.almoco : "", equipamento: orc && orc.local ? orc.equipamento : "", aluguel: orc && orc.local ? orc.aluguel : "",
+        extras: orc && orc.local ? orc.extras.map(x => EXTRAS_NOME[x]).join(", ") : "",
+        nota_fiscal: nfTipo() === "nao" ? "Não" : `${nfTipo().toUpperCase()} ${f.doc.value}`, tributos: orc ? orc.tributos : "",
+        deslocamento: orc ? orc.deslocamento : "", pacote: orc ? orc.base : "", total: orc ? orc.total : "",
+        origem: location.search.slice(1) || "direto"
+      };
+      fetch(SHEETS_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(reg) }).catch(() => {});
+    }
+    const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(linhas)}`;
+    $("#waLink").href = url;
+    window.open(url, "_blank", "noopener");
+    $("#formWrap").style.display = "none";
+    $("#done").classList.add("show");
+    $("#form").scrollIntoView({behavior:"smooth",block:"start"});
+    $("#done").focus({preventScroll:true});
+  });
+</script>
+</body>
+</html>
