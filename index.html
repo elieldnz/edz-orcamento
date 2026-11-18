@@ -270,7 +270,7 @@
               <label for="msg">Conte um pouco do projeto <span class="opt">(opcional)</span></label>
               <textarea id="msg" name="msg" placeholder="Quantos vídeos, duração, referência que você gosta..."></textarea>
             </div>
-            <label class="consent"><input type="checkbox" id="lgpd" name="lgpd" aria-describedby="e-lgpd"> <span>Aceito que a EDZ Films registre estes dados na sua planilha de pedidos e me contate pelo WhatsApp sobre este orçamento. Eles não serão usados para outra finalidade, e posso pedir a exclusão a qualquer momento. *</span></label>
+            <label class="consent"><input type="checkbox" id="lgpd" name="lgpd" aria-describedby="e-lgpd"> <span>Aceito que a EDZ Films registre estes dados na sua planilha de pedidos e me contate pelo WhatsApp sobre este orçamento. Eles não serão usados para outra finalidade, e posso pedir a exclusão a qualquer momento (<a href="privacidade.html" target="_blank">política de privacidade</a>). *</span></label>
             <div class="err" id="e-lgpd" aria-live="polite"></div>
             <button class="btn btn-primary" type="submit">Enviar pelo WhatsApp →</button>
             <p class="note">Ao enviar, abrimos o WhatsApp com seu pedido já escrito. É só tocar em enviar.</p>
@@ -325,7 +325,7 @@
 <footer>
   <div class="wrap">
     <span>© <span id="ano"></span> EDZ Films · Produção e edição de vídeo</span>
-    <a href="https://elieldnz.github.io/edz-films-site/">Voltar ao site</a>
+    <a href="privacidade.html">Privacidade</a> · <a href="https://elieldnz.github.io/edz-films-site/">Voltar ao site</a>
   </div>
 </footer>
 
@@ -335,7 +335,7 @@
   // Link do Apps Script que grava os pedidos na planilha (deixe "" para desligar)
   // ID do cliente OAuth do Google (console.cloud.google.com > APIs e serviços > Credenciais).
   // Com ele, aparece o botão "Continuar com Google", que preenche nome e e-mail. Deixe "" para desligar.
-  const GOOGLE_CLIENT_ID = "";
+  const GOOGLE_CLIENT_ID = "302768682734-9ctk37kmt8i1dcrv1vm7lima6fbdfunu.apps.googleusercontent.com";
   const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwzFk9KS2B4iCrnid5iuJbRVvk8J19b9yKbipuNQwzY40VhPodgwfSLryMzh-6jOsEK/exec";
   // Custos de deslocamento (edite à vontade)
   const CUSTOS = {
@@ -376,7 +376,7 @@
     gs.src = "https://accounts.google.com/gsi/client"; gs.async = true;
     gs.onload = () => {
       google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID, auto_select: false, cancel_on_tap_outside: true, context: "use",
+        client_id: GOOGLE_CLIENT_ID, auto_select: false, use_fedcm_for_prompt: true, cancel_on_tap_outside: true, context: "use",
         callback: ({ credential }) => {
           try {
             const b64 = credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");
