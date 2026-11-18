@@ -151,7 +151,8 @@
         <div id="formWrap">
           <h2>Pedir orçamento</h2>
           <p class="sub">Leva menos de 1 minuto. Os campos com * são obrigatórios.</p>
-          <form id="lead" novalidate>
+          <form id="lead" novalidate autocomplete="on">
+            <div id="gWrap" hidden style="margin-bottom:18px"><div id="gBtn"></div><p class="note" style="margin-top:8px">Preenche nome e e-mail da sua Conta Google. O WhatsApp você digita.</p></div>
             <div class="row">
               <div class="field">
                 <label for="nome">Seu nome *</label>
@@ -160,7 +161,7 @@
               </div>
               <div class="field">
                 <label for="whats">WhatsApp com DDD *</label>
-                <input id="whats" name="whats" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000" required aria-describedby="e-whats">
+                <input id="whats" name="whats" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(11) 90000-0000" required aria-describedby="e-whats">
                 <div class="err" id="e-whats" aria-live="polite"></div>
               </div>
             </div>
@@ -237,7 +238,7 @@
                 </div>
                 <div class="field">
                   <label for="numero">Número *</label>
-                  <input id="numero" name="numero" type="text" inputmode="numeric" autocomplete="address-line2" aria-describedby="e-numero">
+                  <input id="numero" name="numero" type="text" inputmode="numeric" autocomplete="off" aria-describedby="e-numero">
                   <div class="err" id="e-numero" aria-live="polite"></div>
                 </div>
               </div>
@@ -332,6 +333,9 @@
   /* ===== CONFIGURAÇÃO: mesmo número do index.html ===== */
   const WHATSAPP = "5511952689176";
   // Link do Apps Script que grava os pedidos na planilha (deixe "" para desligar)
+  // ID do cliente OAuth do Google (console.cloud.google.com > APIs e serviços > Credenciais).
+  // Com ele, aparece o botão "Continuar com Google", que preenche nome e e-mail. Deixe "" para desligar.
+  const GOOGLE_CLIENT_ID = "";
   const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwzFk9KS2B4iCrnid5iuJbRVvk8J19b9yKbipuNQwzY40VhPodgwfSLryMzh-6jOsEK/exec";
   // Custos de deslocamento (edite à vontade)
   const CUSTOS = {
@@ -365,10 +369,36 @@
   if (q && mapa[q]) { const el = document.querySelector(`input[name=servico][value="${mapa[q]}"]`); if (el) el.checked = true; }
 
   setTimeout(() => toggleLocal(), 0);
+
+  // ---------- preencher com Google (só nome e e-mail; nada é guardado além do pedido) ----------
+  if (GOOGLE_CLIENT_ID) {
+    const gs = document.createElement("script");
+    gs.src = "https://accounts.google.com/gsi/client"; gs.async = true;
+    gs.onload = () => {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID, auto_select: false, cancel_on_tap_outside: true, context: "use",
+        callback: ({ credential }) => {
+          try {
+            const b64 = credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");
+            const u = JSON.parse(decodeURIComponent(escape(atob(b64))));
+            if (u.name && !$("#nome").value) $("#nome").value = u.name;
+            if (u.email && !$("#email").value) $("#email").value = u.email;
+            setErr("nome",""); $("#whats").focus();
+          } catch(e) {}
+        }
+      });
+      google.accounts.id.renderButton($("#gBtn"), { theme:"filled_black", size:"large", shape:"pill", text:"continue_with", locale:"pt-BR", width: 280 });
+      $("#gWrap").hidden = false;
+      google.accounts.id.prompt(); // One Tap, quando o navegador permite
+    };
+    document.head.appendChild(gs);
+  }
   // máscara simples de telefone
   const tel = $("#whats");
   tel.addEventListener("input", () => {
-    let d = tel.value.replace(/\D/g, "").slice(0, 11);
+    let d = tel.value.replace(/\D/g, "");
+    if (d.length > 11 && d.startsWith("55")) d = d.slice(2); // autofill com +55
+    d = d.slice(0, 11);
     if (d.length > 6) tel.value = `(${d.slice(0,2)}) ${d.slice(2, d.length-4)}-${d.slice(-4)}`;
     else if (d.length > 2) tel.value = `(${d.slice(0,2)}) ${d.slice(2)}`;
     else tel.value = d;
