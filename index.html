@@ -116,6 +116,14 @@
 
   @media (max-width:980px){.jump{display:inline-flex}.grid{grid-template-columns:1fr}.works,.steps{grid-template-columns:1fr 1fr}}
   @media (max-width:600px){.row,.prices{grid-template-columns:1fr}.works,.steps{grid-template-columns:1fr}.form-card{padding:22px}.hero{padding:40px 0 56px}section{padding:56px 0}}
+  .vmodal{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:20px}
+  .vmodal.open{display:flex}
+  .vmodal .vbox{width:min(1100px,100%);}
+  .vmodal .vframe{position:relative;aspect-ratio:16/9;width:100%;background:#000;border-radius:14px;overflow:hidden}
+  .vmodal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vmodal .vbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;color:#BFB2A8;font-size:14px}
+  .vmodal .vbar a{color:#BFB2A8}
+  .vmodal .vclose{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.12);border:0;color:#fff;width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -291,11 +299,11 @@
       <span class="eyebrow">Trabalhos</span>
       <h2 class="sec-title">Veja o que já fizemos no seu segmento</h2>
       <div class="works">
-        <a class="work" href="https://www.youtube.com/playlist?list=PLYf5YNQk9c6Q" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/d-QDbZ22VmQ/hqdefault.jpg" alt=""><div>Comércio e restaurantes<span>Comerciais com locução</span></div></a>
-        <a class="work" href="https://www.youtube.com/playlist?list=PLPm5fJndGUpE" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/azwf3bTP9zs/hqdefault.jpg" alt=""><div>Imobiliárias<span>Tours de imóveis</span></div></a>
-        <a class="work" href="https://www.youtube.com/playlist?list=PLfJeAw9WzSmw" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/C703h_lXqYI/hqdefault.jpg" alt=""><div>Clínicas e estética<span>Séries educativas</span></div></a>
-        <a class="work" href="https://www.youtube.com/playlist?list=PLbYFC1hOCmQE" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/6cXUgsvhCXk/hqdefault.jpg" alt=""><div>Cursos e conteúdo<span>Aulas e programas</span></div></a>
-        <a class="work" href="https://www.youtube.com/playlist?list=PLRiKjx0YMtgM" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/3Mgr2SMTOCA/hqdefault.jpg" alt=""><div>Músicos e artistas<span>Clipes e bastidores</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLYf5YNQk9c6Q" data-video="d-QDbZ22VmQ" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/d-QDbZ22VmQ/hqdefault.jpg" alt=""><div>Comércio e restaurantes<span>Comerciais com locução</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLPm5fJndGUpE" data-video="azwf3bTP9zs" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/azwf3bTP9zs/hqdefault.jpg" alt=""><div>Imobiliárias<span>Tours de imóveis</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLfJeAw9WzSmw" data-video="C703h_lXqYI" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/C703h_lXqYI/hqdefault.jpg" alt=""><div>Clínicas e estética<span>Séries educativas</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLbYFC1hOCmQE" data-video="6cXUgsvhCXk" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/6cXUgsvhCXk/hqdefault.jpg" alt=""><div>Cursos e conteúdo<span>Aulas e programas</span></div></a>
+        <a class="work" href="https://www.youtube.com/playlist?list=PLRiKjx0YMtgM" data-video="3Mgr2SMTOCA" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/3Mgr2SMTOCA/hqdefault.jpg" alt=""><div>Músicos e artistas<span>Clipes e bastidores</span></div></a>
         <a class="work" href="https://elieldnz.github.io/edz-films-site/#fotos"><img loading="lazy" src="img/festa/03-bolo.jpg" alt=""><div>Fotos de festas<span>13 festas na galeria</span></div></a>
       </div>
     </div>
@@ -602,6 +610,33 @@
     $("#form").scrollIntoView({behavior:"smooth",block:"start"});
     $("#done").focus({preventScroll:true});
   });
+
+  // ---------- player de vídeo sem sair do site ----------
+  const vm = document.createElement("div");
+  vm.className = "vmodal"; vm.setAttribute("role","dialog"); vm.setAttribute("aria-modal","true"); vm.setAttribute("aria-label","Vídeo");
+  vm.innerHTML = `<button class="vclose" aria-label="Fechar vídeo">✕</button><div class="vbox"><div class="vframe"></div><div class="vbar"><span class="vtit"></span><a class="vyt" target="_blank" rel="noopener">Abrir no YouTube ↗</a></div></div>`;
+  document.body.appendChild(vm);
+  let vVolta = null;
+  const fecharVideo = () => { vm.classList.remove("open"); vm.querySelector(".vframe").innerHTML = ""; document.body.style.overflow = ""; vVolta && vVolta.focus(); };
+  const abrirVideo = (el) => {
+    const u = new URL(el.href), list = u.searchParams.get("list"), v = el.dataset.video || u.searchParams.get("v");
+    if (!list && !v) return false;
+    const src = list
+      ? `https://www.youtube-nocookie.com/embed/${v ? v : "videoseries"}?list=${list}&autoplay=1&rel=0&playsinline=1&modestbranding=1`
+      : `https://www.youtube-nocookie.com/embed/${v}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+    vm.querySelector(".vframe").innerHTML = `<iframe src="${src}" title="${el.dataset.title || "Vídeo EDZ Films"}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+    vm.querySelector(".vtit").textContent = el.dataset.title || "";
+    vm.querySelector(".vyt").href = el.href;
+    vVolta = el; vm.classList.add("open"); document.body.style.overflow = "hidden"; vm.querySelector(".vclose").focus();
+    return true;
+  };
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href*="youtube.com/playlist"], a[href*="youtube.com/watch"], a[data-video]');
+    if (!a || vm.contains(a) || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (abrirVideo(a)) e.preventDefault();
+  });
+  vm.addEventListener("click", e => { if (e.target === vm || e.target.closest(".vclose")) fecharVideo(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && vm.classList.contains("open")) fecharVideo(); });
 </script>
 </body>
 </html>
