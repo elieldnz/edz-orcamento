@@ -700,11 +700,11 @@
   // ---------- vitrine: toque no serviço, passe o dedo na imagem ----------
   (() => {
     const SERV = [
-      { id: "Reels", nome: "Reels", preco: "R$ 600", img: "https://i.ytimg.com/vi/d-QDbZ22VmQ/maxresdefault.jpg",
+      { id: "Reels", nome: "Reels", preco: "R$ 600", img: "img/vitrine/reels.jpg",
         desc: "4 Reels editados com o material que você já gravou.", itens: ["Até 60 s cada", "Legendas, trilha original e cor", "Pronto em 48h"] },
-      { id: "Cortes de podcast/live", nome: "Cortes", preco: "R$ 600", img: "https://i.ytimg.com/vi/6cXUgsvhCXk/maxresdefault.jpg",
+      { id: "Cortes de podcast/live", nome: "Cortes", preco: "R$ 600", img: "img/vitrine/cortes.jpg",
         desc: "6 cortes verticais da sua live, podcast ou palestra.", itens: ["Até 90 min de material", "Legendas dinâmicas", "Pronto em 72h"] },
-      { id: "Captação de vídeo", nome: "Captação", preco: "R$ 1.100", img: "https://i.ytimg.com/vi/azwf3bTP9zs/maxresdefault.jpg",
+      { id: "Captação de vídeo", nome: "Captação", preco: "R$ 1.100", img: "img/vitrine/captacao.jpg",
         desc: "Eu vou até o seu negócio e gravo. Deslocamento calculado pelo CEP.", itens: ["Até 4h no local", "2 Reels editados", "Material bruto entregue"] },
       { id: "Fotos de evento", nome: "Fotos de festa", preco: "R$ 690", img: "img/festa/thalita-35-bolo.jpg",
         desc: "Cobertura do seu aniversário ou festa temática. Deslocamento à parte.", itens: ["Até 3h de evento", "120+ fotos editadas", "Galeria online em até 7 dias"] },
@@ -737,9 +737,7 @@
       atual = i; const s = SERV[i];
       chips.querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.i === i));
       after.src = before.src = s.img; after.alt = s.nome;
-      // miniatura do YouTube em alta não existe em todo vídeo: cai para a padrão e amplia para esconder as faixas pretas
-      after.onerror = () => { if (after.src.includes("maxresdefault")) { const hq = after.src.replace("maxresdefault", "hqdefault"); after.src = before.src = hq; after.style.transform = "scale(1.34)"; before.style.transform = "scale(1.38)"; } };
-      after.style.transform = ""; before.style.transform = "";
+      stage.style.aspectRatio = s.img.includes("vitrine/") ? "16 / 9" : "";
       box.querySelector(".vprice").textContent = s.preco;
       box.querySelector(".vdesc").textContent = s.desc;
       box.querySelector(".vlist").innerHTML = s.itens.map(t => `<li>${t}</li>`).join("");
