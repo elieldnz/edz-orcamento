@@ -124,6 +124,32 @@
   .vmodal .vbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;color:#BFB2A8;font-size:14px}
   .vmodal .vbar a{color:#BFB2A8}
   .vmodal .vclose{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.12);border:0;color:#fff;width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer}
+
+  /* vitrine interativa */
+  .vitrine{padding:64px 0}
+  .vgrid{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}
+  .vchips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 20px}
+  .vchips button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:10px 16px;font:600 15px Inter,sans-serif;cursor:pointer}
+  .vchips button[aria-selected=true]{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+  .vprice{font-family:"Space Grotesk",sans-serif;font-size:40px;display:block}
+  .vdesc{color:var(--muted);margin:6px 0 12px}
+  .vlist{list-style:none;margin:0 0 20px;padding:0;color:var(--muted)}
+  .vlist li{padding:4px 0}.vlist li::before{content:"✓ ";color:var(--accent);font-weight:700}
+  .vstage{position:relative;aspect-ratio:4/5;border-radius:22px;overflow:hidden;background:#000;touch-action:none;cursor:crosshair;user-select:none}
+  .vimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;transition:opacity .35s}
+  .vbefore{filter:grayscale(.75) brightness(.72) contrast(.78) blur(2.5px) saturate(.6);transform:scale(1.03)}
+  .vtag{position:absolute;top:14px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,0,0,.6);color:#fff;padding:5px 10px;border-radius:999px}
+  .vtag-a{left:14px}.vtag-b{right:14px;background:var(--accent);color:var(--ink)}
+  .vhint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;padding:8px 14px;border-radius:999px;font-size:14px;animation:vpulse 1.8s ease-in-out infinite;pointer-events:none;transition:opacity .4s}
+  .vstage.used .vhint{opacity:0}
+  @keyframes vpulse{50%{transform:translateX(-50%) scale(1.06)}}
+  .vnote{color:var(--muted);font-size:13px;margin-top:12px}
+  @media (max-width:860px){.vgrid{grid-template-columns:1fr}.vstage{aspect-ratio:1/1}}
+  /* fundo que segue o relógio */
+  body[data-periodo=manha] .hero::before{background:radial-gradient(circle,rgba(245,183,0,.28),transparent 65%)}
+  body[data-periodo=tarde] .hero::before{background:radial-gradient(circle,rgba(255,140,60,.32),transparent 65%)}
+  body[data-periodo=noite] .hero::before{background:radial-gradient(circle,rgba(122,24,44,.6),transparent 65%)}
+  .hero::before{transition:background 1s}
 </style>
 </head>
 <body>
@@ -292,6 +318,29 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="vitrine" id="vitrine">
+    <div class="wrap vgrid">
+      <div>
+        <span class="eyebrow">Escolha o serviço</span>
+        <h2 class="sec-title">Toque no serviço e <em style="font-style:normal;color:var(--accent)">passe o dedo</em> na imagem</h2>
+        <div class="vchips" role="tablist" aria-label="Serviços"></div>
+        <div class="vinfo">
+          <b class="vprice"></b>
+          <p class="vdesc"></p>
+          <ul class="vlist"></ul>
+          <button type="button" class="btn btn-primary vcta">Quero este</button>
+        </div>
+      </div>
+      <div class="vstage" aria-label="Passe o dedo para ver a versão editada">
+        <img class="vimg vafter" alt="">
+        <img class="vimg vbefore" alt="" aria-hidden="true">
+        <span class="vtag vtag-a">Bruto</span><span class="vtag vtag-b">Editado EDZ</span>
+        <span class="vhint">☝ Passe o dedo aqui</span>
+      </div>
+    </div>
+    <p class="wrap vnote">O lado "bruto" é uma simulação para mostrar a diferença que a edição e a cor fazem.</p>
   </section>
 
   <section class="band">
@@ -637,6 +686,74 @@
   });
   vm.addEventListener("click", e => { if (e.target === vm || e.target.closest(".vclose")) fecharVideo(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && vm.classList.contains("open")) fecharVideo(); });
+
+  // ---------- fundo e saudação que seguem o relógio ----------
+  (() => {
+    const h = new Date().getHours();
+    const per = h >= 5 && h < 12 ? "manha" : h >= 12 && h < 18 ? "tarde" : "noite";
+    document.body.dataset.periodo = per;
+    const ola = { manha: "Bom dia!", tarde: "Boa tarde!", noite: "Boa noite!" }[per];
+    const eb = document.querySelector(".hero .eyebrow");
+    if (eb) eb.textContent = ola + " Orçamento sem compromisso";
+  })();
+
+  // ---------- vitrine: toque no serviço, passe o dedo na imagem ----------
+  (() => {
+    const SERV = [
+      { id: "Reels", nome: "Reels", preco: "R$ 600", img: "https://i.ytimg.com/vi/d-QDbZ22VmQ/maxresdefault.jpg",
+        desc: "4 Reels editados com o material que você já gravou.", itens: ["Até 60 s cada", "Legendas, trilha original e cor", "Pronto em 48h"] },
+      { id: "Cortes de podcast/live", nome: "Cortes", preco: "R$ 600", img: "https://i.ytimg.com/vi/6cXUgsvhCXk/maxresdefault.jpg",
+        desc: "6 cortes verticais da sua live, podcast ou palestra.", itens: ["Até 90 min de material", "Legendas dinâmicas", "Pronto em 72h"] },
+      { id: "Captação de vídeo", nome: "Captação", preco: "R$ 1.100", img: "https://i.ytimg.com/vi/azwf3bTP9zs/maxresdefault.jpg",
+        desc: "Eu vou até o seu negócio e gravo. Deslocamento calculado pelo CEP.", itens: ["Até 4h no local", "2 Reels editados", "Material bruto entregue"] },
+      { id: "Fotos de evento", nome: "Fotos de festa", preco: "R$ 690", img: "img/festa/thalita-35-bolo.jpg",
+        desc: "Cobertura do seu aniversário ou festa temática. Deslocamento à parte.", itens: ["Até 3h de evento", "120+ fotos editadas", "Galeria online em até 7 dias"] },
+    ];
+    const box = document.getElementById("vitrine"); if (!box) return;
+    const chips = box.querySelector(".vchips"), stage = box.querySelector(".vstage");
+    const after = box.querySelector(".vafter"), before = box.querySelector(".vbefore");
+    chips.innerHTML = SERV.map((s, i) => `<button type="button" role="tab" aria-selected="${i === 0}" data-i="${i}">${s.nome}</button>`).join("");
+    // máscara desenhada só com o traço do dedo (sem pixels da foto)
+    const cv = document.createElement("canvas"); const cx = cv.getContext("2d");
+    let atual = 0, raf = 0;
+    const tamanho = () => { const r = stage.getBoundingClientRect(); cv.width = Math.max(1, Math.round(r.width / 2)); cv.height = Math.max(1, Math.round(r.height / 2)); limpa(); };
+    const limpa = () => { cx.globalCompositeOperation = "source-over"; cx.fillStyle = "#000"; cx.fillRect(0, 0, cv.width, cv.height); aplica(); };
+    const aplica = () => { const u = `url(${cv.toDataURL()})`; before.style.webkitMaskImage = u; before.style.maskImage = u;
+      before.style.webkitMaskSize = before.style.maskSize = "100% 100%"; };
+    const pinta = e => {
+      const r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / 2, y = (e.clientY - r.top) / 2;
+      cx.globalCompositeOperation = "destination-out";
+      const g = cx.createRadialGradient(x, y, 0, x, y, 34); g.addColorStop(0, "rgba(0,0,0,1)"); g.addColorStop(1, "rgba(0,0,0,0)");
+      cx.fillStyle = g; cx.beginPath(); cx.arc(x, y, 34, 0, Math.PI * 2); cx.fill();
+      stage.classList.add("used");
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; aplica(); });
+    };
+    let desenhando = false;
+    stage.addEventListener("pointerdown", e => { desenhando = true; stage.setPointerCapture(e.pointerId); pinta(e); });
+    stage.addEventListener("pointermove", e => { if (desenhando || e.pointerType === "mouse") pinta(e); });
+    stage.addEventListener("pointerup", () => desenhando = false);
+    stage.addEventListener("pointercancel", () => desenhando = false);
+    const mostra = i => {
+      atual = i; const s = SERV[i];
+      chips.querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.i === i));
+      after.src = before.src = s.img; after.alt = s.nome;
+      // miniatura do YouTube em alta não existe em todo vídeo: cai para a padrão e amplia para esconder as faixas pretas
+      after.onerror = () => { if (after.src.includes("maxresdefault")) { const hq = after.src.replace("maxresdefault", "hqdefault"); after.src = before.src = hq; after.style.transform = "scale(1.34)"; before.style.transform = "scale(1.38)"; } };
+      after.style.transform = ""; before.style.transform = "";
+      box.querySelector(".vprice").textContent = s.preco;
+      box.querySelector(".vdesc").textContent = s.desc;
+      box.querySelector(".vlist").innerHTML = s.itens.map(t => `<li>${t}</li>`).join("");
+      stage.classList.remove("used"); limpa();
+    };
+    chips.addEventListener("click", e => { const b = e.target.closest("button"); if (b) mostra(+b.dataset.i); });
+    box.querySelector(".vcta").addEventListener("click", () => {
+      const el = document.querySelector(`input[name=servico][value="${SERV[atual].id}"]`);
+      if (el && !el.checked) { el.checked = true; el.dispatchEvent(new Event("change", { bubbles: true })); }
+      document.getElementById("form").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    new ResizeObserver(tamanho).observe(stage);
+    mostra(0);
+  })();
 </script>
 </body>
 </html>
