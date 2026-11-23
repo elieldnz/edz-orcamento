@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Demo · Showreel que segue o cursor · EDZ Films</title>
+<link rel="icon" href="img/icone.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#121110;--wine:#2A0E16;--text:#F3EFE6;--muted:#BFB2A8;--accent:#F5B700;--line:#3A2C2A;--e:cubic-bezier(.16,1,.3,1)}
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden}
+  header{position:fixed;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:20px 32px;z-index:5}
+  header img{height:36px}
+  header a.cta{background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;padding:11px 20px;border-radius:999px;font-size:14px}
+  .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:120px 32px 60px;
+    background:radial-gradient(1200px 600px at 70% 30%,rgba(245,183,0,.10),transparent 60%),radial-gradient(900px 500px at 10% 90%,rgba(42,14,22,.9),transparent 70%);cursor:none}
+  .eyebrow{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:clamp(56px,11vw,180px);line-height:.88;letter-spacing:-.05em;max-width:14ch;position:relative;z-index:1;mix-blend-mode:difference}
+  h1 em{font-style:normal;color:var(--accent);mix-blend-mode:normal}
+  .sub{margin-top:28px;color:var(--muted);font-size:18px;max-width:46ch;position:relative;z-index:1}
+  .dica{position:absolute;left:32px;bottom:28px;font-size:13px;color:var(--muted);letter-spacing:.05em}
+
+  /* janelinha que segue o cursor */
+  .reel{position:fixed;left:0;top:0;width:200px;aspect-ratio:4/5;border-radius:18px;overflow:hidden;z-index:3;cursor:pointer;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.08);will-change:transform;border:0;padding:0;background:#000;
+    transition:opacity .4s var(--e)}
+  .reel video{width:100%;height:100%;object-fit:cover;display:block}
+  .reel .tag{position:absolute;left:10px;right:10px;bottom:10px;display:flex;align-items:center;gap:8px;font:600 12px Inter,sans-serif;color:var(--text);
+    background:rgba(18,17,16,.7);backdrop-filter:blur(8px);padding:8px 10px;border-radius:999px}
+  .reel .tag i{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center;font-style:normal;font-size:10px}
+  .reel .rec{position:absolute;top:10px;left:10px;font:600 10px Inter,sans-serif;letter-spacing:.1em;display:flex;align-items:center;gap:6px}
+  .reel .rec::before{content:"";width:7px;height:7px;border-radius:50%;background:#ff3b3b;animation:pisca 1.2s infinite}
+  @keyframes pisca{50%{opacity:.2}}
+  .reel.escondido{opacity:0;pointer-events:none}
+
+  /* player em tela cheia */
+  .player{position:fixed;inset:0;z-index:10;display:grid;place-items:center;background:rgba(10,9,8,0);pointer-events:none;transition:background .5s var(--e)}
+  .player[hidden]{display:none}
+  .player.on{background:rgba(10,9,8,.94);pointer-events:auto}
+  .player .quadro{position:fixed;overflow:hidden;background:#000;border-radius:18px}
+  .player video{width:100%;height:100%;object-fit:cover;display:block}
+  .ctrl{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;display:flex;align-items:center;gap:14px;
+    background:rgba(31,26,24,.85);backdrop-filter:blur(10px);border:1px solid var(--line);padding:10px 14px;border-radius:999px;transition:.4s var(--e);width:min(560px,90vw)}
+  .player.on .ctrl{opacity:1;transform:translate(-50%,0);transition-delay:.35s}
+  .ctrl button{background:none;border:0;color:var(--text);font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:50%}
+  .ctrl button:hover,.ctrl button:focus-visible{background:rgba(255,255,255,.1);outline:none}
+  .barra{flex:1;height:6px;background:rgba(255,255,255,.15);border-radius:6px;cursor:pointer;position:relative}
+  .barra b{position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);border-radius:6px}
+  .tempo{font:500 12px Inter,sans-serif;color:var(--muted);font-variant-numeric:tabular-nums;min-width:74px;text-align:right}
+  .fechar{position:fixed;top:22px;right:26px;opacity:0;transition:.3s;background:rgba(31,26,24,.85);border:1px solid var(--line);color:var(--text);
+    width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer}
+  .player.on .fechar{opacity:1;transition-delay:.35s}
+  .orc{position:fixed;top:22px;left:26px;opacity:0;transition:.3s;background:var(--accent);color:var(--bg);font-weight:600;text-decoration:none;padding:11px 18px;border-radius:999px;font-size:14px}
+  .player.on .orc{opacity:1;transition-delay:.45s}
+
+  .nota{padding:60px 32px 80px;max-width:760px;color:var(--muted);line-height:1.7}
+  .nota h2{font-family:"Space Grotesk";color:var(--text);margin-bottom:12px}
+  .nota li{margin-left:20px}
+
+  /* toque: janelinha fica parada no canto */
+  @media (hover:none),(max-width:760px){
+    .hero{cursor:auto}
+    .reel{left:auto;top:auto;right:18px;bottom:18px;width:130px;transform:none!important}
+    .dica{display:none}
+    .reel .tag{font-size:11px;padding:6px 8px;white-space:nowrap}.reel .tag i{width:18px;height:18px}
+  }
+  @media (prefers-reduced-motion:reduce){.reel{transform:none!important;left:auto;top:auto;right:24px;bottom:24px}}
+</style>
+</head>
+<body>
+<header>
+  <a href="./"><img src="img/logo.svg" alt="EDZ Films"></a>
+  <a class="cta" href="./">Orçamento em 1 minuto</a>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <p class="eyebrow">Produtora de vídeo · Embu das Artes e Grande SP</p>
+    <h1>Reels que param o <em>scroll</em>.</h1>
+    <p class="sub">Gravação, edição e legenda prontos para postar em 48h. Clique no vídeo para assistir em tela cheia.</p>
+    <p class="dica">Mexa o mouse · clique na janelinha</p>
+  </section>
+
+  <section class="nota">
+    <h2>Sobre esta demo</h2>
+    <p>Página de teste da ideia "Cursor-Docked Showreel" (AnimatedWebs), feita do zero com o vídeo da EDZ:</p>
+    <ul>
+      <li>a janelinha segue o mouse com atraso e inclina conforme a velocidade;</li>
+      <li>no clique, ela cresce suavemente até a tela cheia, com controles próprios;</li>
+      <li>no celular, fica parada no canto e abre com um toque;</li>
+      <li>Esc ou ✕ fecha e a janelinha volta para o lugar.</li>
+    </ul>
+  </section>
+</main>
+
+<button class="reel" id="reel" aria-label="Assistir reel em tela cheia">
+  <video autoplay muted loop playsinline preload="metadata" poster="video/hero-poster.jpg">
+    <source src="video/hero.webm" type="video/webm"><source src="video/hero.mp4" type="video/mp4">
+  </video>
+  <span class="tag"><i>▶</i> Assistir reel</span>
+</button>
+
+<div class="player" id="player" role="dialog" aria-modal="true" aria-label="Reel EDZ Films" hidden>
+  <div class="quadro" id="quadro">
+    <video id="pv" playsinline loop muted preload="auto" poster="video/hero-poster.jpg">
+      <source src="video/hero.webm" type="video/webm"><source src="video/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+  <a class="orc" href="./">Quero um assim →</a>
+  <button class="fechar" id="fechar" aria-label="Fechar">✕</button>
+  <div class="ctrl">
+    <button id="pp" aria-label="Pausar">❚❚</button>
+    <div class="barra" id="barra" role="slider" aria-label="Posição do vídeo" tabindex="0"><b id="prog"></b></div>
+    <span class="tempo" id="tempo">0:00 / 0:00</span>
+  </div>
+</div>
+
+<script>
+(() => {
+  const reel = document.getElementById("reel"), hero = document.getElementById("hero");
+  const player = document.getElementById("player"), quadro = document.getElementById("quadro"), pv = document.getElementById("pv");
+  const segue = matchMedia("(hover:hover) and (min-width:761px)").matches && !matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const W = 200, H = 250;
+  let mx = innerWidth * .72, my = innerHeight * .55, x = mx, y = my, rot = 0, aberto = false;
+
+  /* 1. janelinha segue o cursor com atraso e inclinação */
+  if (segue) {
+    addEventListener("pointermove", e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+    const loop = () => {
+      const dx = mx - x; x += dx * .12; y += (my - y) * .12;
+      rot += (Math.max(-12, Math.min(12, dx * .06)) - rot) * .15;
+      if (!aberto) reel.style.transform = `translate(${x - W / 2}px,${y - H / 2}px) rotate(${rot}deg)`;
+      requestAnimationFrame(loop);
+    };
+    loop();
+    // some quando o mouse sai do topo da página
+    const io = new IntersectionObserver(([e]) => reel.classList.toggle("escondido", !e.isIntersecting && !aberto), { threshold: .25 });
+    io.observe(hero);
+  }
+
+  /* 2. clique: cresce até a tela cheia (FLIP) */
+  const alvo = () => { // tamanho final, mantendo 4:5
+    const h = Math.min(innerHeight * .78, (innerWidth * .9) * 5 / 4), w = h * 4 / 5;
+    return { left: (innerWidth - w) / 2, top: (innerHeight - h) / 2 - 20, width: w, height: h };
+  };
+  const pos = r => Object.assign(quadro.style, { left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px" });
+  const abrir = () => {
+    if (aberto) return; aberto = true;
+    const r = reel.getBoundingClientRect(), a = alvo();
+    pv.currentTime = reel.querySelector("video").currentTime;
+    player.hidden = false; pos(a);
+    // começa no lugar da janelinha e anima até o centro
+    const sx = r.width / a.width, sy = r.height / a.height;
+    quadro.animate([
+      { transform: `translate(${r.left - a.left}px,${r.top - a.top}px) scale(${sx},${sy}) rotate(${rot}deg)`, borderRadius: "40px" },
+      { transform: "none", borderRadius: "18px" }
+    ], { duration: 650, easing: "cubic-bezier(.16,1,.3,1)" });
+    reel.style.visibility = "hidden";
+    requestAnimationFrame(() => player.classList.add("on"));
+    pv.play().catch(() => {});
+    document.getElementById("fechar").focus({ preventScroll: true });
+  };
+  const fechar = () => {
+    if (!aberto) return;
+    const a = quadro.getBoundingClientRect(), r = reel.getBoundingClientRect();
+    player.classList.remove("on");
+    const anim = quadro.animate([
+      { transform: "none", borderRadius: "18px" },
+      { transform: `translate(${r.left - a.left}px,${r.top - a.top}px) scale(${r.width / a.width},${r.height / a.height})`, borderRadius: "40px" }
+    ], { duration: 500, easing: "cubic-bezier(.7,0,.2,1)" });
+    anim.onfinish = () => { player.hidden = true; reel.style.visibility = ""; pv.pause(); aberto = false; reel.focus({ preventScroll: true }); };
+  };
+  reel.addEventListener("click", abrir);
+  document.getElementById("fechar").addEventListener("click", fechar);
+  player.addEventListener("click", e => { if (e.target === player) fechar(); });
+  addEventListener("keydown", e => { if (e.key === "Escape") fechar(); if (aberto && e.key === " ") { e.preventDefault(); toggle(); } });
+  addEventListener("resize", () => { if (aberto) pos(alvo()); });
+
+  /* 3. controles próprios */
+  const pp = document.getElementById("pp"), barra = document.getElementById("barra"), prog = document.getElementById("prog"), tempo = document.getElementById("tempo");
+  const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  const toggle = () => pv.paused ? pv.play() : pv.pause();
+  pp.addEventListener("click", toggle);
+  pv.addEventListener("play", () => { pp.textContent = "❚❚"; pp.setAttribute("aria-label", "Pausar"); });
+  pv.addEventListener("pause", () => { pp.textContent = "▶"; pp.setAttribute("aria-label", "Tocar"); });
+  pv.addEventListener("timeupdate", () => {
+    const d = pv.duration || 0; prog.style.width = d ? (pv.currentTime / d * 100) + "%" : 0;
+    tempo.textContent = `${mmss(pv.currentTime)} / ${mmss(d)}`;
+  });
+  const busca = e => { const r = barra.getBoundingClientRect(); pv.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * (pv.duration || 0); };
+  barra.addEventListener("pointerdown", e => { busca(e); const m = ev => busca(ev); addEventListener("pointermove", m); addEventListener("pointerup", () => removeEventListener("pointermove", m), { once: true }); });
+  barra.addEventListener("keydown", e => { if (e.key === "ArrowRight") pv.currentTime += 2; if (e.key === "ArrowLeft") pv.currentTime -= 2; });
+})();
+</script>
+</body>
+</html>
